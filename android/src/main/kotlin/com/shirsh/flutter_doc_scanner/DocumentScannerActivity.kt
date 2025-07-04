@@ -113,7 +113,7 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_your_current_scanner) // Make sure this matches your layout file
+       setContentView(R.layout.activity_document_scanner) // Ensure it's all lowercase// Make sure this matches your layout file
 
         previewView = findViewById(R.id.camera_preview_view)
         messageTextView = findViewById(R.id.message_text_view)
