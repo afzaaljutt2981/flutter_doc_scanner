@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:scaleType="fitCenter" />
-
+ 
     <com.shirsh.flutter_doc_scanner.DocumentOverlayView
         android:id="@+id/document_overlay_view"
         android:layout_width="0dp"
