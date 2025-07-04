@@ -21,6 +21,11 @@ class MockFlutterDocScannerPlatform
 
   @override
   Future<String?> getScanDocumentsUri([int page = 5]) => Future.value();
+  
+  @override
+  Future<List<String>?> startAdvancedDocumentScan() {
+    throw UnimplementedError();
+  }
 }
 
 void main() {
