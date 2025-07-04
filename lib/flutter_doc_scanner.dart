@@ -26,4 +26,12 @@ class FlutterDocScanner {
           "Currently, this feature is supported only on Android Platform");
     }
   }
+
+  /// **NEW PUBLIC API METHOD**
+  ///
+  /// Initiates an advanced document scan using the native UI with auto-detection.
+  /// Returns a list of image paths (or a single PDF path) upon successful scan.
+  Future<List<String>?> startAdvancedDocumentScan() {
+    return FlutterDocScannerPlatform.instance.startAdvancedDocumentScan();
+  }
 }

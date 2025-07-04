@@ -42,4 +42,11 @@ abstract class FlutterDocScannerPlatform extends PlatformInterface {
   Future<dynamic> getScanDocumentsUri([int page = 4]) {
     throw UnimplementedError('ScanDocuments() has not been implemented.');
   }
+
+   /// **NEW METHOD FOR ADVANCED SCANNING UI**
+  ///
+  /// This method will launch the native document scanning UI with auto-detection
+  /// and capture features. It will return the paths to the scanned images
+  /// or a PDF, depending on the native implementation.
+  Future<List<String>?> startAdvancedDocumentScan();
 }

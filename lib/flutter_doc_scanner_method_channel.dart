@@ -51,4 +51,23 @@ class MethodChannelFlutterDocScanner extends FlutterDocScannerPlatform {
     );
     return data;
   }
+
+  /// **NEW IMPLEMENTATION FOR ADVANCED SCANNING UI**
+  @override
+  Future<List<String>?> startAdvancedDocumentScan() async {
+    try {
+      // Invoke a new method on the native side to launch the advanced scanner.
+      // The native side will handle the UI and return the result.
+      final List<dynamic>? result =
+          await methodChannel.invokeMethod('startAdvancedDocumentScan');
+      if (result != null) {
+        return result.cast<String>(); // Cast the dynamic list to List<String>
+      }
+      return null;
+    } on PlatformException catch (e) {
+      // Handle potential errors from the native side, e.g., camera permission denied.
+      debugPrint("Failed to start advanced document scan: '${e.message}'.");
+      return null;
+    }
+  }
 }
