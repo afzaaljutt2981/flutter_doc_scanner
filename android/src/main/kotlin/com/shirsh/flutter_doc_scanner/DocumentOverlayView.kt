@@ -1,13 +1,15 @@
 package com.shirsh.flutter_doc_scanner
-// ... (any existing imports)
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path // Added import for Path
+import android.graphics.PointF // Added import for PointF (or ensure it's there)
+import android.util.AttributeSet // Added import for AttributeSet
+import android.util.Size
 import android.view.View
-import androidx.camera.view.PreviewView // Crucial
-import android.util.Size // For Size if used there
-import kotlin.math.min // For min function
+import androidx.camera.view.PreviewView
+import kotlin.math.min
 
 class DocumentOverlayView @JvmOverloads constructor(
     context: Context,
@@ -51,15 +53,15 @@ class DocumentOverlayView @JvmOverloads constructor(
                 // and potentially letterboxed/pillarboxed within the preview view.
 
                 // Calculate the scaling factors for width and height
-                val scaleX = previewWidth.toFloat() / imageWidth
-                val scaleY = previewHeight.toFloat() / imageHeight
+                val scaleX = previewWidth.toFloat() / imageWidth.toFloat() // Ensure float division
+                val scaleY = previewHeight.toFloat() / imageHeight.toFloat() // Ensure float division
 
                 // Determine the actual scale to maintain aspect ratio (fitCenter)
                 val actualScale = min(scaleX, scaleY)
 
                 // Calculate offsets if the image is letterboxed/pillarboxed
-                val offsetX = (previewWidth - (imageWidth * actualScale)) / 2
-                val offsetY = (previewHeight - (imageHeight * actualScale)) / 2
+                val offsetX = (previewWidth.toFloat() - (imageWidth.toFloat() * actualScale)) / 2f
+                val offsetY = (previewHeight.toFloat() - (imageHeight.toFloat() * actualScale)) / 2f
 
                 val mappedCorners = corners.map { point ->
                     PointF(

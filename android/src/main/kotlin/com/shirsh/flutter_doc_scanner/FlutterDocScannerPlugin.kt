@@ -79,7 +79,8 @@ class FlutterDocScannerPlugin : MethodCallHandler, ActivityResultListener,
                     return
                 }
                 // Launch your custom DocumentScannerActivity
-                val intent = Intent(activity, DocumentScannerActivity::class.java) // Ensure this points to your new Activity file
+                // CORRECTED: Use YourCurrentScannerActivity::class.java
+                val intent = Intent(activity, YourCurrentScannerActivity::class.java)
                 activity?.startActivityForResult(intent, REQUEST_CODE_CUSTOM_SCANNER)
             }
             else -> {
@@ -299,8 +300,9 @@ class FlutterDocScannerPlugin : MethodCallHandler, ActivityResultListener,
             // --- NEW Case for your custom scanner results ---
             REQUEST_CODE_CUSTOM_SCANNER -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    // Expecting a list of image paths (Strings) from your custom DocumentScannerActivity
-                    val imagePaths = data?.getStringArrayListExtra(DocumentScannerActivity.SCANNED_IMAGE_PATHS_KEY)
+                    // Expecting a list of image paths (Strings) from your custom YourCurrentScannerActivity
+                    // CORRECTED: Use YourCurrentScannerActivity.SCANNED_IMAGE_PATHS_KEY
+                    val imagePaths = data?.getStringArrayListExtra(YourCurrentScannerActivity.SCANNED_IMAGE_PATHS_KEY)
                     resultChannel.success(imagePaths)
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     resultChannel.success(emptyList<String>()) // Or null, depending on your desired Flutter behavior for cancellation

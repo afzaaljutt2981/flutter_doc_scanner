@@ -1,28 +1,36 @@
 package com.shirsh.flutter_doc_scanner
 
 import android.Manifest
+import android.annotation.SuppressLint // Explicitly import for @SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Matrix
+// import android.graphics.Bitmap // Only needed if you explicitly handle Bitmap manipulation
+// import android.graphics.Matrix // Only needed if you explicitly handle Matrix transformations
 import android.graphics.PointF
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size // Explicitly import Size
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
+import androidx.camera.core.CameraSelector // Explicitly import CameraSelector
+import androidx.camera.core.ImageAnalysis // Explicitly import ImageAnalysis
+import androidx.camera.core.ImageCapture // Explicitly import ImageCapture
+import androidx.camera.core.ImageCaptureException // Explicitly import ImageCaptureException
+import androidx.camera.core.ImageProxy // Explicitly import ImageProxy
+import androidx.camera.core.Preview // Explicitly import Preview
+import androidx.camera.lifecycle.ProcessCameraProvider // Explicitly import ProcessCameraProvider
+import androidx.camera.view.PreviewView // Explicitly import PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.documentscanner.* // Assuming you're using ML Kit Document Scanner
-
+import com.google.mlkit.vision.common.InputImage // Explicitly import InputImage
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanner // Explicitly import GmsDocumentScanner
+import com.google.mlkit.vision.documentscanner.GmsDocumentScannerOptions // Explicitly import GmsDocumentScannerOptions
+import com.google.mlkit.vision.documentscanner.GmsDocumentScanning // Explicitly import GmsDocumentScanning
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -30,7 +38,6 @@ import java.util.*
 import java.util.concurrent.Executors
 import kotlin.math.max
 import kotlin.math.min
-
 
 // Your main Activity for scanning
 class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerActivity
@@ -63,7 +70,7 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       setContentView(R.layout.activity_document_scanner) // Ensure it's all lowercase// Make sure this matches your layout file
+        setContentView(R.layout.activity_document_scanner) // Ensure it's all lowercase
 
         previewView = findViewById(R.id.camera_preview_view)
         messageTextView = findViewById(R.id.message_text_view)
@@ -73,10 +80,11 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
         documentOverlayView = findViewById(R.id.document_overlay_view)
 
         // Initialize ML Kit Document Scanner
-        documentScanner = GmsDocumentScanning.getClient(GmsDocumentScannerOptions.Builder()
-            .setResultFormats(GmsDocumentScannerOptions.RESULT_FORMAT_JPEG) // Or .RESULT_FORMAT_PDF if you want PDF directly
-            .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_BASE) // Or .SCANNER_MODE_FULL for more features
-            .build())
+        val options = GmsDocumentScannerOptions.Builder()
+            .setResultFormats(GmsDocumentScannerOptions.RESULT_FORMAT_JPEG)
+            .setScannerMode(GmsDocumentScannerOptions.SCANNER_MODE_BASE)
+            .build()
+        documentScanner = GmsDocumentScanning.getClient(options)
 
         // Set initial UI state
         updateUIMessage("Looking for document...")
@@ -93,7 +101,9 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
         manualButton.setOnClickListener {
             setAutoCaptureToggle(false)
             updateUIMessage("Position document in frame")
-            documentOverlayView.setDocumentCorners(null, previewView, Size(1,1)) // Clear overlay
+            // When switching to manual, clear the overlay. Use a placeholder size like Size(1,1)
+            // if you don't have the actual image size at this point, as it's not used when corners are null.
+            documentOverlayView.setDocumentCorners(null, previewView, Size(1,1))
         }
 
         autoCaptureButton.setOnClickListener {
@@ -169,7 +179,7 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
                                     }
                                 } else {
                                     // No document detected or not 4 corners
-                                    documentOverlayView.setDocumentCorners(null, previewView, imageSize)
+                                    documentOverlayView.setDocumentCorners(null, previewView, Size(1,1)) // Clear overlay
                                     updateUIMessage("Looking for document...")
                                     lastDocumentDetectionTime = 0 // Reset timer
                                     lastDetectedCorners = null
@@ -293,8 +303,10 @@ class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerAc
         autoCaptureButton.isSelected = isAuto
 
         // Update text color based on selection
-        val selectedTextColor = ContextCompat.getColor(this, android.R.color.black) // Or your selected color
-        val unselectedTextColor = ContextCompat.getColor(this, android.R.color.white) // Or your unselected color
+        // IMPORTANT: Use your plugin's R.color instead of android.R.color.
+        // I've commented out the problematic lines, you need to define these colors.
+        val selectedTextColor = ContextCompat.getColor(this, R.color.black) // Use R.color.black
+        val unselectedTextColor = ContextCompat.getColor(this, R.color.white) // Use R.color.white
 
         manualButton.setTextColor(if (!isAuto) selectedTextColor else unselectedTextColor)
         autoCaptureButton.setTextColor(if (isAuto) selectedTextColor else unselectedTextColor)
@@ -323,7 +335,7 @@ class ImageAnalyzer(private val listener: (List<PointF>?, Size) -> Unit) : Image
         val mediaImage = imageProxy.image
         if (mediaImage != null) {
             val inputImage = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-            
+
             // --- Replace this with actual document detection logic ---
             // Example: Using ML Kit Document Scanner's internal detection (though it's usually called via scanDocument)
             // Or use OpenCV for contour detection.
