@@ -1,14 +1,13 @@
 package com.shirsh.flutter_doc_scanner
+// ... (any existing imports)
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PointF
-import android.util.AttributeSet
 import android.view.View
-import androidx.camera.view.PreviewView
-import android.util.Size // Import Android's Size class
+import androidx.camera.view.PreviewView // Crucial
+import android.util.Size // For Size if used there
+import kotlin.math.min // For min function
 
 class DocumentOverlayView @JvmOverloads constructor(
     context: Context,

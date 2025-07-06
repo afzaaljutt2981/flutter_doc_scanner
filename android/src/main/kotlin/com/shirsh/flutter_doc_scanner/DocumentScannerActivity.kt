@@ -31,56 +31,6 @@ import java.util.concurrent.Executors
 import kotlin.math.max
 import kotlin.math.min
 
-// This custom view will draw the bounding box. Create it in a new file: DocumentOverlayView.kt
-class DocumentOverlayView @JvmOverloads constructor(
-    context: android.content.Context,
-    attrs: android.util.AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
-
-    private val paint = android.graphics.Paint().apply {
-        color = android.graphics.Color.RED // Default border color
-        strokeWidth = 5f
-        style = android.graphics.Paint.Style.STROKE
-    }
-    private var documentCorners: List<PointF>? = null
-    private var previewWidth: Int = 0
-    private var previewHeight: Int = 0
-    private var imageWidth: Int = 0
-    private var imageHeight: Int = 0
-
-    fun setDocumentCorners(corners: List<PointF>?, previewView: PreviewView, imageAnalysisSize: Size) {
-        this.documentCorners = corners
-        this.previewWidth = previewView.width
-        this.previewHeight = previewView.height
-        this.imageWidth = imageAnalysisSize.width
-        this.imageHeight = imageAnalysisSize.height
-        invalidate() // Redraw the view
-    }
-
-    override fun onDraw(canvas: android.graphics.Canvas) {
-        super.onDraw(canvas)
-        documentCorners?.let { corners ->
-            if (corners.size == 4) {
-                // Map the corners from image coordinates to screen coordinates
-                val mappedCorners = corners.map { point ->
-                    val x = point.x / imageWidth * previewWidth
-                    val y = point.y / imageHeight * previewHeight
-                    PointF(x, y)
-                }
-
-                val path = android.graphics.Path()
-                path.moveTo(mappedCorners[0].x, mappedCorners[0].y)
-                path.lineTo(mappedCorners[1].x, mappedCorners[1].y)
-                path.lineTo(mappedCorners[2].x, mappedCorners[2].y)
-                path.lineTo(mappedCorners[3].x, mappedCorners[3].y)
-                path.close()
-                canvas.drawPath(path, paint)
-            }
-        }
-    }
-}
-
 
 // Your main Activity for scanning
 class YourCurrentScannerActivity : AppCompatActivity() { // Or DocumentScannerActivity
