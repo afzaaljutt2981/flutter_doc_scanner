@@ -7,7 +7,7 @@ class FlutterDocScanner {
   }
 
   Future<dynamic> getScanDocuments({int page = 4}) {
-    return FlutterDocScannerPlatform.instance.getScanDocuments(page);
+    return FlutterDocScannerPlatform.instance.getScanDocuments(page); 
   }
 
   Future<dynamic> getScannedDocumentAsImages({int page = 4}) {
